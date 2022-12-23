@@ -63,19 +63,21 @@ Complete a month cost analysis of each Azure resource to give an estimate total 
 
 | Azure Resource | Service Tier | Monthly Cost |
 | ------------ | ------------ | ------------ |
-| *Azure Postgres Database* |   Signle server  |     $28.39         |
-| *Azure App Service* |   Signle server  |     $28.39         |
-| *Azure Service Bus*   |    Basic     |          Basic tier: $0.05/million messages    |
-| *Azure Functions*	                   |    F1     |       $0.00       |
-| *Storage Account*	                   |    F1     |       $21.95       |
+| *Azure Postgres Database* |   General purpose  |     $138.47        |
+| *Azure App Service* |   S1  |     $91.25         |
+| *Azure Service Bus*   |    Standard     |        $79.41    |
+| *Azure Functions*	                   |    Consumption     |      $0.00 for the first 1,000,000 requests |
+| *Storage Account*	                   |    Standard     |       $19.20       |
+| Overall monthly cost                 ||                $329.56      |
 
 ## Architecture Explanation
-### Web App Service
-- The deployement of new features is as easy as pushing them to the repository
-- Scaling the application is far simpler compared to VMs
-- Cheaper compared to VMs
-- Allows the developement team to use microservices architecture which decouples the app functionality.
-### Azure function
-- Cost effective, Pay per function execution.
-- Decouples the functionality of sending notifications from the web app
-- Making changes to the functionality is simple and does not effect other parts of the system.
+
+### Old architecture
+- Everything is tightly coupled which makes scaling parts of the system complex
+- Sending a lot of notifcations may cause timeouts if the application couldn't do it quick enough 
+
+### New architecture
+- Any changes to the notifcation service can be easily done without disutrbing the main app
+- Messages being in queue makes error recovery easy, because it saves the messages for 14 days.
+- Scaling the notifcations service is far easier given that it's decoupeld from the main app
+
